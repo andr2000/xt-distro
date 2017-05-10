@@ -6,5 +6,6 @@ BBPATH = "${TOPDIR}"
 BBFILES ?= ""
 
 BBLAYERS ?= " \
-  ##OEROOT##/xt-distro \
+  ##OEROOT##/meta \
+  ##OEROOT##/meta-xt \
   "
