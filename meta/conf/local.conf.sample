@@ -48,7 +48,7 @@ MACHINE ??= "genericx86-64"
 #
 # The default is a downloads directory under TOPDIR which is the build directory.
 #
-#DL_DIR ?= "${TOPDIR}/downloads"
+DL_DIR = "/home/a2k/projects/build_release/work/downloads"
 
 #
 # Where to place shared-state files
