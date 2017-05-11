@@ -12,7 +12,6 @@ hob-image-*.bb
 *.orig
 *.rej
 *~
-!meta-xt-distro
 pull-*/
 bitbake/lib/toaster/contrib/tts/backlog.txt
 bitbake/lib/toaster/contrib/tts/log/*
