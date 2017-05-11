@@ -1,2 +1,2 @@
 # Template settings
-TEMPLATECONF=${TEMPLATECONF:-meta-xt/conf}
+TEMPLATECONF=${TEMPLATECONF:-meta-xt-distro/conf}
