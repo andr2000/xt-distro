@@ -1,4 +1,40 @@
-inherit utils
+BB_DEFAULT_TASK ?= "build"
+CLASSOVERRIDE ?= "class-target"
+
+def prune_suffix(var, suffixes, d):
+    # See if var ends with any of the suffixes listed and
+    # remove it if found
+    for suffix in suffixes:
+        if var.endswith(suffix):
+            var = var.replace(suffix, "")
+
+    prefix = d.getVar("MLPREFIX")
+    if prefix and var.startswith(prefix):
+        var = var.replace(prefix, "")
+
+    return var
+
+def base_prune_suffix(var, suffixes, d):
+    return prune_suffix(var, suffixes, d)
+
+def base_cpu_count():
+    import multiprocessing
+    return multiprocessing.cpu_count()
+
+base_update_conf_value() {
+    local config_file=$1
+    local key=$2
+    local value=$3
+    local key_prefix=$4
+    local exists=`grep "^[^\#]*${key}.*=" "${config_file}"`
+
+    if [ -z ${exists} ] ; then
+        # make placeholder
+        echo "${key}${key_prefix}=" >> "${config_file}"
+    fi
+    # substitute
+    sed -i "s%\(${key}.*= *\).*%\1\"${value}\"%" "${config_file}"
+}
 
 addtask fetch
 do_fetch[dirs] = "${DL_DIR}"
@@ -39,9 +75,4 @@ python base_do_unpack() {
         bb.fatal(str(e))
 }
 
-addtask build after do_unpack
-python base_do_build () {
-    bb.debug(1, "Building")
-}
-
-EXPORT_FUNCTIONS do_fetch do_unpack do_build
+EXPORT_FUNCTIONS do_fetch do_unpack
