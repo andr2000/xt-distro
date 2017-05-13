@@ -75,4 +75,39 @@ python base_do_unpack() {
         bb.fatal(str(e))
 }
 
-EXPORT_FUNCTIONS do_fetch do_unpack
+addtask patch after do_unpack
+do_patch() {
+    :
+}
+
+addtask configure after do_patch
+base_do_configure() {
+    :
+}
+
+addtask compile after do_configure
+base_do_compile() {
+    :
+}
+
+addtask install after do_compile
+base_do_install() {
+    :
+}
+
+base_do_package() {
+    :
+}
+
+addtask populate_sysroot after do_install
+do_populate_sysroot() {
+    :
+}
+
+addtask build after do_populate_sysroot
+do_build () {
+    :
+}
+
+EXPORT_FUNCTIONS do_fetch do_unpack do_configure do_compile do_install do_package
+EXPORT_FUNCTIONS cpu_count prune_suffix update_conf_value

@@ -3,7 +3,7 @@
 # oe-init-build-env script. Use bash directly
 
 addtask configure after do_unpack
-build_yocto_do_configure () {
+do_configure () {
     local local_conf="${S}/build/conf/local.conf"
 
     cd ${S}
@@ -33,10 +33,13 @@ build_yocto_do_configure () {
     fi
 }
 
-addtask build after do_configure
-build_yocto_do_build () {
+addtask compile after do_configure
+do_compile () {
     cd ${S}
     /bin/bash -x -c "source poky/oe-init-build-env && bitbake ${XT_BB_IMAGE_TARGET}"
 }
 
-EXPORT_FUNCTIONS do_build do_configure
+addtask build after do_compile
+do_build () {
+    :
+}
