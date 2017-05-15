@@ -48,7 +48,7 @@ MACHINE ??= "genericx86-64"
 #
 # The default is a downloads directory under TOPDIR which is the build directory.
 #
-DL_DIR = "/home/a2k/projects/build_release/work/downloads"
+DL_DIR ?= "/media/storage/downloads"
 
 #
 # Where to place shared-state files
@@ -64,7 +64,7 @@ DL_DIR = "/home/a2k/projects/build_release/work/downloads"
 #
 # The default is a sstate-cache directory under TOPDIR.
 #
-#SSTATE_DIR ?= "${TOPDIR}/sstate-cache"
+SSTATE_DIR ?= "/media/storage/sstate-cache"
 
 #
 # Where to place the build output
@@ -235,3 +235,6 @@ PACKAGECONFIG_append_pn-nativesdk-qemu = " sdl"
 # track the version of this file when it was generated. This can safely be ignored if
 # this doesn't mean anything to you.
 CONF_VERSION = "1"
+
+DEPLOY_DIR = "${TMPDIR}/deploy"
+IMAGE_ROOTFS = "${TMPDIR}/rootfs"

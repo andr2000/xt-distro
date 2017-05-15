@@ -23,10 +23,10 @@ do_configure () {
                 base_update_conf_value ${local_conf} SSTATE_DIR ${SSTATE_DIR}
         fi
         if [ -n ${IMAGE_ROOTFS} ] ; then
-                base_update_conf_value ${local_conf} IMAGE_ROOTFS ${IMAGE_ROOTFS}
+                base_update_conf_value ${local_conf} IMAGE_ROOTFS ${IMAGE_ROOTFS}/${PN}
         fi
         if [ -n ${DEPLOY_DIR} ] ; then
-                base_update_conf_value ${local_conf} DEPLOY_DIR ${DEPLOY_DIR}
+                base_update_conf_value ${local_conf} DEPLOY_DIR ${DEPLOY_DIR}/${PN}
         fi
         base_update_conf_value ${local_conf} INHERIT buildhistory "+"
         base_update_conf_value ${local_conf} BUILDHISTORY_COMMIT 1
