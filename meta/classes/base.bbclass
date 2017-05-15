@@ -1,6 +1,34 @@
 BB_DEFAULT_TASK ?= "build"
 CLASSOVERRIDE ?= "class-target"
 
+inherit patch
+
+OE_IMPORTS += "os sys time oe.path oe.types oe.utils"
+OE_IMPORTS[type] = "list"
+
+def oe_import(d):
+    import sys
+
+    bbpath = d.getVar("BBPATH").split(":")
+    sys.path[0:0] = [os.path.join(dir, "lib") for dir in bbpath]
+
+    def inject(name, value):
+        """Make a python object accessible from the metadata"""
+        if hasattr(bb.utils, "_context"):
+            bb.utils._context[name] = value
+        else:
+            __builtins__[name] = value
+
+    import oe.data
+    for toimport in oe.data.typed_value("OE_IMPORTS", d):
+        imported = __import__(toimport)
+        inject(toimport.split(".", 1)[0], imported)
+
+    return ""
+
+# We need the oe module name space early (before INHERITs get added)
+OE_IMPORTED := "${@oe_import(d)}"
+
 def prune_suffix(var, suffixes, d):
     # See if var ends with any of the suffixes listed and
     # remove it if found
@@ -73,11 +101,6 @@ python base_do_unpack() {
         bb.debug(1, "Unpacking: %s" % "\n".join(d.getVar('S').split()))
     except bb.fetch2.BBFetchException as e:
         bb.fatal(str(e))
-}
-
-addtask patch after do_unpack
-do_patch() {
-    :
 }
 
 addtask configure after do_patch
