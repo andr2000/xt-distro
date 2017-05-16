@@ -29,6 +29,11 @@ def oe_import(d):
 # We need the oe module name space early (before INHERITs get added)
 OE_IMPORTED := "${@oe_import(d)}"
 
+FILESPATH = "${@base_set_filespath(["${FILE_DIRNAME}/${BP}", "${FILE_DIRNAME}/${BPN}", "${FILE_DIRNAME}/files"], d)}"
+# THISDIR only works properly with imediate expansion as it has to run
+# in the context of the location its used (:=)
+THISDIR = "${@os.path.dirname(d.getVar('FILE'))}"
+
 def prune_suffix(var, suffixes, d):
     # See if var ends with any of the suffixes listed and
     # remove it if found
