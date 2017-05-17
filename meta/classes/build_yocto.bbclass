@@ -8,14 +8,14 @@ do_configure () {
 
     cd ${S}
     /bin/bash -x -c "source poky/oe-init-build-env"
-    if [ -e ${XT_BB_LAYERS_FILE} ] ; then
-        cp ${XT_BB_LAYERS_FILE} ${S}/build/conf/bblayers.conf
+    if [ -f "${S}/${XT_BB_LAYERS_FILE}" ] ; then
+        cp "${S}/${XT_BB_LAYERS_FILE}" "${S}/build/conf/bblayers.conf"
     fi
-    if [ -e ${XT_BB_LOCAL_CONF_FILE} ] ; then
-        cp ${XT_BB_LOCAL_CONF_FILE} ${local_conf}
+    if [ -f "${S}/${XT_BB_LOCAL_CONF_FILE}" ] ; then
+        cp "${S}/${XT_BB_LOCAL_CONF_FILE}" "${local_conf}"
     fi
     # update local.conf so inner build uses our folders
-    if [ -e ${local_conf} ] ; then
+    if [ -f ${local_conf} ] ; then
         if [ -n ${DL_DIR} ] ; then
                 base_update_conf_value ${local_conf} DL_DIR ${DL_DIR}
         fi
