@@ -140,6 +140,7 @@ base_do_install() {
     :
 }
 
+addtask package after do_install
 base_do_package() {
     :
 }
