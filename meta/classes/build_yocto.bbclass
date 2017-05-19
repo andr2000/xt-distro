@@ -27,6 +27,9 @@ bash_run_configure () {
         if [ -n ${DEPLOY_DIR} ] ; then
                 base_update_conf_value ${local_conf} DEPLOY_DIR ${DEPLOY_DIR}/${PN}
         fi
+        if [ -n ${XT_SHARED_ROOTFS_DIR} ] ; then
+                base_update_conf_value ${local_conf} XT_SHARED_ROOTFS_DIR ${XT_SHARED_ROOTFS_DIR}
+        fi
         base_update_conf_value ${local_conf} INHERIT buildhistory "+"
         base_update_conf_value ${local_conf} BUILDHISTORY_COMMIT 1
     fi
