@@ -1,8 +1,4 @@
-# HACK: oe-init-build-env cannot be run directly as Yocto uses /bin/sh
-# which by default is dash on Ububntu which is a problem for
-# oe-init-build-env script. Use bash directly
-
-bash_run_configure () {
+build_yocto_configure() {
     local local_conf="${S}/build/conf/local.conf"
 
     cd ${S}
@@ -35,57 +31,56 @@ bash_run_configure () {
     fi
 }
 
-bash_add_bblayer () {
+build_yocto_add_bblayer() {
     cd ${S}
 
     source poky/oe-init-build-env && bitbake-layers add-layer ${S}/${XT_BBLAYER}
 }
 
-bash_get_kernel_provider_fname () {
+build_yocto_bbappend_kernel_provider() {
     cd ${S}
 
-    source poky/oe-init-build-env &&
-    provider=`bitbake virtual/kernel -e | grep "^[^\#]*PREFERRED_PROVIDER_virtual/kernel" | grep -oP '"[^"]*"'` &&
-    provider_fname=`eval bitbake-layers show-recipes -f ${provider} | grep -E '\.bb$' | head -1` &&
-    XT_KERNEL_RECIPE_FILE=$(basename "$provider_fname") &&
-    export XT_KERNEL_RECIPE_FILE
+    source poky/oe-init-build-env
+    provider=`bitbake virtual/kernel -e | grep "^[^\#]*PREFERRED_PROVIDER_virtual/kernel" | grep -oP '"[^"]*"'`
+    path=`eval bitbake-layers show-recipes -f ${provider} | grep -E '\.bb$' | head -1`
+    filename=`echo $(basename "$path") | sed -E 's/_.*/_%.bbappend/g'`
+    mkdir -p "${S}/${XT_QUIRCK_KERNEL_DEPLOY_RECIPE_DIR}"
+    bbappend_fname="${S}/${XT_QUIRCK_KERNEL_DEPLOY_RECIPE_DIR}/${filename}"
+    echo "DEPLOYDIR=\"${XT_SHARED_ROOTFS_DIR}/boot/${XT_QUIRCK_KERNEL_DEPLOY_IMAGE_DIR}\"" > "${bbappend_fname}"
+    echo "MODULE_TARBALL_DEPLOY=\"0\"" >> "${bbappend_fname}"
 }
 
-def generate_kernel_deploy_bbappend(d):
-    import os
-
+python build_yocto_do_kernel_deploy_bbappend_generate() {
     shared_deploy_dir = d.getVar("XT_SHARED_ROOTFS_DIR") or ""
     if not shared_deploy_dir:
         return
-    kernel_recipe_path = d.getVar("XT_QUIRCK_KERNEL_DEPLOY_RECIPE_PATH") or ""
+    kernel_recipe_path = d.getVar("XT_QUIRCK_KERNEL_DEPLOY_RECIPE_DIR") or ""
     if not kernel_recipe_path:
         return
-    if not os.path.exists(shared_deploy_dir):
-        os.makedirs(shared_deploy_dir)
-    if not os.path.exists(kernel_recipe_path):
-        os.makedirs(kernel_recipe_path)
-    bb.build.exec_func("bash_get_kernel_provider_fname", d)
-    recipe_fname = d.getVar('XT_KERNEL_RECIPE_FILE') or ""
+    bb.build.exec_func('build_yocto_bbappend_kernel_provider', d)
+}
 
 addtask configure after do_unpack
 python do_configure() {
-    bb.build.exec_func("bash_run_configure", d)
+    bb.build.exec_func("build_yocto_configure", d)
     # add layers to bblayers.conf
     layers = (d.getVar("XT_QUIRCK_BB_ADD_LAYER") or "").split()
     if layers:
         for layer in layers:
             bb.debug(1, "Adding to bblayers.conf: " + str(layer.split()))
             d.setVar('XT_BBLAYER', str(layer))
-            bb.build.exec_func("bash_add_bblayer", d)
+            bb.build.exec_func("build_yocto_add_bblayer", d)
 }
 
 addtask compile after do_configure
-do_compile () {
+do_compile() {
     cd ${S}
     source poky/oe-init-build-env && bitbake ${XT_BB_IMAGE_TARGET}
 }
 
 addtask build after do_compile
-do_build () {
+do_build() {
     :
 }
+
+EXPORT_FUNCTIONS do_kernel_deploy_bbappend_generate
