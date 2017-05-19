@@ -6,7 +6,7 @@ bash_run_configure () {
     local local_conf="${S}/build/conf/local.conf"
 
     cd ${S}
-    /bin/bash -x -c "source poky/oe-init-build-env"
+    source poky/oe-init-build-env
     if [ -f "${S}/${XT_BB_LAYERS_FILE}" ] ; then
         cp "${S}/${XT_BB_LAYERS_FILE}" "${S}/build/conf/bblayers.conf"
     fi
@@ -38,7 +38,7 @@ bash_run_configure () {
 bash_add_bblayer () {
     cd ${S}
 
-    /bin/bash -x -c "source poky/oe-init-build-env && bitbake-layers add-layer ${S}/${XT_BBLAYER}"
+    source poky/oe-init-build-env && bitbake-layers add-layer ${S}/${XT_BBLAYER}
 }
 
 addtask configure after do_unpack
@@ -56,7 +56,7 @@ python do_configure() {
 addtask compile after do_configure
 do_compile () {
     cd ${S}
-    /bin/bash -x -c "source poky/oe-init-build-env && bitbake ${XT_BB_IMAGE_TARGET}"
+    source poky/oe-init-build-env && bitbake ${XT_BB_IMAGE_TARGET}
 }
 
 addtask build after do_compile
