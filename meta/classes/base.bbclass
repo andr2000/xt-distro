@@ -2,6 +2,7 @@ BB_DEFAULT_TASK ?= "build"
 CLASSOVERRIDE ?= "class-target"
 
 inherit patch
+inherit utility-tasks
 
 OE_IMPORTS += "os sys time oe.path oe.types oe.utils"
 OE_IMPORTS[type] = "list"
@@ -156,6 +157,10 @@ do_build () {
 }
 
 generate_kernel_deploy_bbappend() {
+    :
+}
+
+remove_kernel_deploy_bbappend() {
     :
 }
 
