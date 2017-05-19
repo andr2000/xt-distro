@@ -41,6 +41,32 @@ bash_add_bblayer () {
     source poky/oe-init-build-env && bitbake-layers add-layer ${S}/${XT_BBLAYER}
 }
 
+bash_get_kernel_provider_fname () {
+    cd ${S}
+
+    source poky/oe-init-build-env &&
+    provider=`bitbake virtual/kernel -e | grep "^[^\#]*PREFERRED_PROVIDER_virtual/kernel" | grep -oP '"[^"]*"'` &&
+    provider_fname=`eval bitbake-layers show-recipes -f ${provider} | grep -E '\.bb$' | head -1` &&
+    XT_KERNEL_RECIPE_FILE=$(basename "$provider_fname") &&
+    export XT_KERNEL_RECIPE_FILE
+}
+
+def generate_kernel_deploy_bbappend(d):
+    import os
+
+    shared_deploy_dir = d.getVar("XT_SHARED_ROOTFS_DIR") or ""
+    if not shared_deploy_dir:
+        return
+    kernel_recipe_path = d.getVar("XT_QUIRCK_KERNEL_DEPLOY_RECIPE_PATH") or ""
+    if not kernel_recipe_path:
+        return
+    if not os.path.exists(shared_deploy_dir):
+        os.makedirs(shared_deploy_dir)
+    if not os.path.exists(kernel_recipe_path):
+        os.makedirs(kernel_recipe_path)
+    bb.build.exec_func("bash_get_kernel_provider_fname", d)
+    recipe_fname = d.getVar('XT_KERNEL_RECIPE_FILE') or ""
+
 addtask configure after do_unpack
 python do_configure() {
     bb.build.exec_func("bash_run_configure", d)

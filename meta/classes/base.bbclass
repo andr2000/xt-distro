@@ -155,5 +155,9 @@ do_build () {
     :
 }
 
+generate_kernel_deploy_bbappend() {
+    :
+}
+
 EXPORT_FUNCTIONS do_fetch do_unpack do_configure do_compile do_install do_package
 EXPORT_FUNCTIONS cpu_count prune_suffix update_conf_value
