@@ -34,7 +34,7 @@
 #MACHINE ?= "mpc8315e-rdb"
 #MACHINE ?= "edgerouter"
 #
-MACHINE = "xt-x86-64"
+MACHINE = "xt-distro-machine"
 
 #
 # Where to place downloads
