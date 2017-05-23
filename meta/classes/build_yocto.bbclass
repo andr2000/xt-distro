@@ -46,7 +46,7 @@ build_yocto_bbappend_kernel_provider() {
     filename=`echo $(basename "$path") | sed -E 's/_.*/_%.bbappend/g'`
     mkdir -p "${S}/${XT_QUIRCK_KERNEL_DEPLOY_RECIPE_DIR}"
     bbappend_fname="${S}/${XT_QUIRCK_KERNEL_DEPLOY_RECIPE_DIR}/${filename}"
-    echo "DEPLOYDIR=\"${XT_SHARED_ROOTFS_DIR}/boot/${XT_QUIRCK_KERNEL_DEPLOY_IMAGE_DIR}\"" > "${bbappend_fname}"
+    echo "DEPLOYDIR=\"$""{XT_SHARED_ROOTFS_DIR}/boot/${XT_QUIRCK_KERNEL_DEPLOY_IMAGE_DIR}\"" > "${bbappend_fname}"
     echo "MODULE_TARBALL_DEPLOY=\"0\"" >> "${bbappend_fname}"
 }
 
