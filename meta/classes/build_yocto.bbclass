@@ -60,6 +60,29 @@ python build_yocto_do_kernel_deploy_bbappend_generate() {
     bb.build.exec_func('build_yocto_bbappend_kernel_provider', d)
 }
 
+build_yocto_kernel_import_generate() {
+    cd ${S}
+
+    mkdir -p "${S}/${XT_QUIRCK_KERNEL_IMPORT_RECIPE_DIR}"
+    bb_fname="${S}/${XT_QUIRCK_KERNEL_IMPORT_RECIPE_DIR}/import-kernels.bb"
+    #echo "DEPLOYDIR=\"${XT_SHARED_ROOTFS_DIR}/boot/${XT_QUIRCK_KERNEL_DEPLOY_IMAGE_DIR}\"" > "${bb_fname}"
+    #echo "MODULE_TARBALL_DEPLOY=\"0\"" >> "${bbappend_fname}"
+    echo \
+    "dfsdfsdfs
+     sdfsdfsdfsd" \
+    > "${bb_fname}"
+}
+
+python build_yocto_do_kernel_import_generate() {
+    shared_deploy_dir = d.getVar("XT_SHARED_ROOTFS_DIR") or ""
+    if not shared_deploy_dir:
+        return
+    kernel_recipe_path = d.getVar("XT_QUIRCK_KERNEL_IMPORT_RECIPE_DIR") or ""
+    if not kernel_recipe_path:
+        return
+    bb.build.exec_func('build_yocto_kernel_import_generate', d)
+}
+
 addtask configure after do_unpack
 python do_configure() {
     bb.build.exec_func("build_yocto_configure", d)
@@ -83,4 +106,4 @@ do_build() {
     :
 }
 
-EXPORT_FUNCTIONS do_kernel_deploy_bbappend_generate
+EXPORT_FUNCTIONS do_kernel_deploy_bbappend_generate do_kernel_import_generate
