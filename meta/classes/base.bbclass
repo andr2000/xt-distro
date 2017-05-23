@@ -156,17 +156,9 @@ do_build () {
     :
 }
 
-# this will generate bbappend to the current kernel, so
-# we can change kernel's deploy directory
 python base_do_kernel_deploy_bbappend_generate() {
-}
-
-# this will generate a recipe for Dom0 to import
-# kernels from other domains into rootfs
-python base_do_kernel_import_generate() {
 }
 
 EXPORT_FUNCTIONS do_fetch do_unpack do_configure do_compile do_install do_package
 EXPORT_FUNCTIONS cpu_count prune_suffix update_conf_value
 EXPORT_FUNCTIONS do_kernel_deploy_bbappend_generate
-EXPORT_FUNCTIONS do_kernel_import_generate
