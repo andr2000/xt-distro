@@ -37,29 +37,6 @@ build_yocto_add_bblayer() {
     source poky/oe-init-build-env && bitbake-layers add-layer ${S}/${XT_BBLAYER}
 }
 
-build_yocto_bbappend_kernel_provider() {
-    cd ${S}
-
-    source poky/oe-init-build-env
-    provider=`bitbake virtual/kernel -e | grep "^[^\#]*PREFERRED_PROVIDER_virtual/kernel" | grep -oP '"[^"]*"'`
-    path=`eval bitbake-layers show-recipes -f ${provider} | grep -E '\.bb$' | head -1`
-    filename=`echo $(basename "$path") | sed -E 's/_.*/_%.bbappend/g'`
-    mkdir -p "${S}/${XT_QUIRCK_KERNEL_DEPLOY_RECIPE_DIR}"
-    bbappend_fname="${S}/${XT_QUIRCK_KERNEL_DEPLOY_RECIPE_DIR}/${filename}"
-    echo "DEPLOYDIR=\"$""{XT_SHARED_ROOTFS_DIR}/boot/${XT_QUIRCK_KERNEL_DEPLOY_IMAGE_DIR}\"" > "${bbappend_fname}"
-    echo "MODULE_TARBALL_DEPLOY=\"0\"" >> "${bbappend_fname}"
-}
-
-python build_yocto_do_kernel_deploy_bbappend_generate() {
-    shared_deploy_dir = d.getVar("XT_SHARED_ROOTFS_DIR") or ""
-    if not shared_deploy_dir:
-        return
-    kernel_recipe_path = d.getVar("XT_QUIRCK_KERNEL_DEPLOY_RECIPE_DIR") or ""
-    if not kernel_recipe_path:
-        return
-    bb.build.exec_func('build_yocto_bbappend_kernel_provider', d)
-}
-
 addtask configure after do_unpack
 python do_configure() {
     bb.build.exec_func("build_yocto_configure", d)
@@ -98,5 +75,3 @@ addtask build after do_compile
 do_build() {
     :
 }
-
-EXPORT_FUNCTIONS do_kernel_deploy_bbappend_generate

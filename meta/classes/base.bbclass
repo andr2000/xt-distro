@@ -166,10 +166,6 @@ do_build () {
     :
 }
 
-python base_do_kernel_deploy_bbappend_generate() {
-}
-
 EXPORT_FUNCTIONS do_fetch do_unpack do_configure do_compile do_install do_package
 EXPORT_FUNCTIONS do_populate_sdk do_collect_build_history
 EXPORT_FUNCTIONS cpu_count prune_suffix update_conf_value
-EXPORT_FUNCTIONS do_kernel_deploy_bbappend_generate
