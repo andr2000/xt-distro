@@ -75,7 +75,8 @@ python do_configure() {
 addtask compile after do_configure
 do_compile() {
     cd ${S}
-    source poky/oe-init-build-env && bitbake ${XT_BB_IMAGE_TARGET}
+    source poky/oe-init-build-env
+    bitbake ${XT_BB_IMAGE_TARGET}
 }
 
 do_populate_sdk() {
@@ -83,6 +84,14 @@ do_populate_sdk() {
         cd ${S}
         source poky/oe-init-build-env && bitbake ${XT_BB_IMAGE_TARGET} -c populate_sdk
     fi
+}
+
+do_collect_build_history() {
+    cd ${S}
+    BUILDHISTORY_DIR=${DEPLOY_DIR}/${PN}/buildhistory
+    mkdir -p ${BUILDHISTORY_DIR}
+    source poky/oe-init-build-env
+    buildhistory-collect-srcrevs -a > ${BUILDHISTORY_DIR}/build-versions.inc
 }
 
 addtask build after do_compile
