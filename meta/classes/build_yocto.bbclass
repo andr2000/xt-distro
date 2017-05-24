@@ -37,7 +37,6 @@ build_yocto_add_bblayer() {
     source poky/oe-init-build-env && bitbake-layers add-layer ${S}/${XT_BBLAYER}
 }
 
-addtask configure after do_unpack
 python do_configure() {
     bb.build.exec_func("build_yocto_configure", d)
     # add layers to bblayers.conf
@@ -49,7 +48,6 @@ python do_configure() {
             bb.build.exec_func("build_yocto_add_bblayer", d)
 }
 
-addtask compile after do_configure
 do_compile() {
     cd ${S}
     source poky/oe-init-build-env
@@ -71,7 +69,6 @@ do_collect_build_history() {
     buildhistory-collect-srcrevs -a > ${BUILDHISTORY_DIR}/build-versions.inc
 }
 
-addtask build after do_compile
 do_build() {
     :
 }
