@@ -26,6 +26,9 @@ build_yocto_configure() {
         if [ -n ${XT_SHARED_ROOTFS_DIR} ] ; then
                 base_update_conf_value ${local_conf} XT_SHARED_ROOTFS_DIR ${XT_SHARED_ROOTFS_DIR}
         fi
+        if [ -n ${XT_SSTATE_CACHE_MIRROR_DIR} ] ; then
+                base_update_conf_value ${local_conf} XT_SSTATE_CACHE_MIRROR_DIR ${XT_SSTATE_CACHE_MIRROR_DIR}
+        fi
         base_update_conf_value ${local_conf} INHERIT buildhistory "+"
         base_update_conf_value ${local_conf} BUILDHISTORY_COMMIT 1
     fi
@@ -64,9 +67,16 @@ do_populate_sdk() {
 do_collect_build_history() {
     cd ${S}
     BUILDHISTORY_DIR=${DEPLOY_DIR}/${PN}/buildhistory
-    mkdir -p ${BUILDHISTORY_DIR}
+    install -d ${BUILDHISTORY_DIR}
     source poky/oe-init-build-env
     buildhistory-collect-srcrevs -a > ${BUILDHISTORY_DIR}/build-versions.inc
+}
+
+do_populate_sstate_cache() {
+    if [ -n ${XT_SSTATE_CACHE_MIRROR_DIR} ] ; then
+        install -d ${XT_SSTATE_CACHE_MIRROR_DIR}
+        cp -rf ${SSTATE_DIR} ${XT_SSTATE_CACHE_MIRROR_DIR}
+    fi
 }
 
 do_build() {

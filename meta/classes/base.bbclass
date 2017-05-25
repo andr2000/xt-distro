@@ -161,11 +161,16 @@ do_collect_build_history() {
     :
 }
 
-addtask build after do_collect_build_history
+addtask populate_sstate_cache after do_collect_build_history
+do_populate_sstate_cache() {
+    :
+}
+
+addtask build after do_populate_sstate_cache
 do_build () {
     :
 }
 
 EXPORT_FUNCTIONS do_fetch do_unpack do_configure do_compile do_install do_package
-EXPORT_FUNCTIONS do_populate_sdk do_collect_build_history
+EXPORT_FUNCTIONS do_populate_sdk do_collect_build_history do_populate_sstate_cache
 EXPORT_FUNCTIONS cpu_count prune_suffix update_conf_value
