@@ -15,7 +15,7 @@ build_yocto_configure() {
                 base_update_conf_value ${local_conf} DL_DIR ${DL_DIR}
         fi
         if [ -n ${SSTATE_DIR} ] ; then
-                base_update_conf_value ${local_conf} SSTATE_DIR ${SSTATE_DIR}
+                base_update_conf_value ${local_conf} SSTATE_DIR ${SSTATE_DIR}/${PN}
         fi
         if [ -n ${IMAGE_ROOTFS} ] ; then
                 base_update_conf_value ${local_conf} IMAGE_ROOTFS ${IMAGE_ROOTFS}/${PN}
