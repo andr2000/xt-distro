@@ -23,6 +23,9 @@ build_yocto_configure() {
         if [ -n ${DEPLOY_DIR} ] ; then
                 base_update_conf_value ${local_conf} DEPLOY_DIR ${DEPLOY_DIR}/${PN}
         fi
+        if [ -n ${LOG_DIR} ] ; then
+                base_update_conf_value ${local_conf} LOG_DIR ${LOG_DIR}/${PN}
+        fi
         if [ -n ${XT_SHARED_ROOTFS_DIR} ] ; then
                 base_update_conf_value ${local_conf} XT_SHARED_ROOTFS_DIR ${XT_SHARED_ROOTFS_DIR}
         fi
