@@ -26,6 +26,9 @@ build_yocto_configure() {
         if [ -n ${LOG_DIR} ] ; then
                 base_update_conf_value ${local_conf} LOG_DIR ${LOG_DIR}/${PN}
         fi
+        if [ -n ${BUILDHISTORY_DIR} ] ; then
+                base_update_conf_value ${local_conf} BUILDHISTORY_DIR ${BUILDHISTORY_DIR}/${PN}
+        fi
         if [ -n ${XT_SHARED_ROOTFS_DIR} ] ; then
                 base_update_conf_value ${local_conf} XT_SHARED_ROOTFS_DIR ${XT_SHARED_ROOTFS_DIR}
         fi
@@ -69,8 +72,6 @@ do_populate_sdk() {
 
 do_collect_build_history() {
     cd ${S}
-    BUILDHISTORY_DIR=${DEPLOY_DIR}/${PN}/buildhistory
-    install -d ${BUILDHISTORY_DIR}
     source poky/oe-init-build-env
     buildhistory-collect-srcrevs -a > ${BUILDHISTORY_DIR}/build-versions.inc
 }
