@@ -73,7 +73,8 @@ do_populate_sdk() {
 do_collect_build_history() {
     cd ${S}
     source poky/oe-init-build-env
-    buildhistory-collect-srcrevs -a > ${BUILDHISTORY_DIR}/build-versions.inc
+    HISTORY_DIR=${BUILDHISTORY_DIR}/${PN}
+    buildhistory-collect-srcrevs -a -p ${HISTORY_DIR} > ${HISTORY_DIR}/build-versions.inc
 }
 
 do_populate_sstate_cache() {
