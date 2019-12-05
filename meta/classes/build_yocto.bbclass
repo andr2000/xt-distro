@@ -54,7 +54,7 @@ build_yocto_configure() {
                 base_update_conf_value "${local_conf}" DL_DIR "${DL_DIR}"
         fi
         if [ -n "${SSTATE_DIR}" ] ; then
-                base_update_conf_value "${local_conf}" SSTATE_DIR "${SSTATE_DIR}/${PN}"
+                base_update_conf_value "${local_conf}" SSTATE_DIR "${SSTATE_DIR}"
         fi
         if [ -n "${DEPLOY_DIR}" ] ; then
                 base_update_conf_value "${local_conf}" DEPLOY_DIR "${DEPLOY_DIR}/${PN}"
